@@ -27,40 +27,25 @@ function catWrite(outPath, content){
     })
 }
 
-// cat(argv[2]);
-
 function webCat(url, outPath){
-    if(outPath){
-        axios.get(url)
-            .then((res) =>{
-                console.log(res.data);
+    axios.get(url)
+        .then((res) =>{
+            if(outPath){
                 catWrite(outPath, res.data);
-            })
-            .catch((err) => {
-                console.log(`Error fetching ${url}:`)
-                console.log("   Error:", err.message);
-            })
-    } else{
-        axios.get(url)
-            .then((res) =>{
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log(`Error fetching ${url}:`)
-                console.log("   Error:", err.message);
-            })
-
-    }
+            } else{
+                console.log(res.data)
+            }
+        })
+        .catch((err) => {
+            console.log(`Error fetching ${url}:`)
+            console.log("   Error:", err.message);
+        })
 }
 
-function outputHandler(){
+function outputHandler(argv){
     if(argv[2] == "--out"){
         let outPath = argv[3]
         let path = argv[4]
-        // console.log("Outputting")
-        // for(let i=0; i< argv.length; i++){
-        //     console.log(argv[i]);
-        // }
         let re = /http*/;
         // First test if arg is a url
         if(re.test(path)){
@@ -70,15 +55,18 @@ function outputHandler(){
             
         }
     } else{
+
         let re = /http*/;
-        // First test if arg is a url
-        if(re.test(argv[2])){
-            webCat(argv[2]);
-        } else {
-            cat(argv[2]);
+        for(let i=2; i<argv.length; i++){
+            // First test if arg is a url
+            if(re.test(argv[i])){
+                webCat(argv[i]);
+            } else {
+                cat(argv[i]);
+            }
         }
     }
 
 }
 
-outputHandler();
+outputHandler(argv);

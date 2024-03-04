@@ -13,8 +13,6 @@ function cat(path){
     })
 }
 
-// cat(argv[2]);
-
 function webCat(url){
     axios.get(url)
         .then((res) =>{
